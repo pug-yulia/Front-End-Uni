@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>React getting started</title>
+  </head>
+  <body>
+    <!-- Root container for react components -->
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+      function Counter() {
+        const [count, setCount] = React.useState(0);
+
+        return (
+          <div>
+            <p>You clicked {count} times</p>
+            <button onClick={() => setCount(count + 1)}>+</button>
+            <button onClick={() => setCount(count - 1)}>-</button>
+            <button onClick={() => setCount(0)}>Reset</button>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<div><Counter /></div>);    
+    </script>
+  </body>
+</html>
