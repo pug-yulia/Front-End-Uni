@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>React getting started</title>
+    <style>
+        body {
+          zoom: 1.5; 
+        }
+      </style>
+  </head>
+  <body>
+    <!-- Root container for react components -->
+    <div id="root"></div>
+
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+      function InputDemo() {
+        const [info, setInfo] = React.useState({
+          name: "",
+          age: "",
+        });
+
+        const [msg, setMsg] = React.useState("");
+
+        const handleSubmit = (e) => {
+          e.preventDefault(); //prevent browser refresh
+
+          if (parseInt(info.age) < 18) {
+            setMsg("You are too young");
+          } else {
+            setMsg(`Hello, ${info.name}!`);
+          }
+        };
+
+        return (
+          <div> 
+            <div>{msg}</div>
+            <br />
+            <form onSubmit={handleSubmit}>
+              <input
+                placeholder="Type name"
+                value={info.name}
+                onChange={(e) => setInfo({ ...info, name: e.target.value })}
+              />
+              <br />
+              <input
+                placeholder="Type age"
+                value={info.age}
+                onChange={(e) => setInfo({ ...info, age: e.target.value })}
+              />
+              <br />
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<InputDemo />);
+    </script>
+  </body>
+</html>
