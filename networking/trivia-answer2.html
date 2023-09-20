@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Trivia Question</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+  <script type="text/babel">
+    function Trivia() {
+      const [data, setData] = React.useState([]);
+      const [answer, setAnswer] = React.useState(null);
+      const [showAnswer, setShowAnswer] = React.useState(false);
+
+      const fetchQuestion = () => {
+        setShowAnswer(false); // Reset showAnswer when fetching a new question
+        fetch("https://opentdb.com/api.php?amount=1")
+          .then((response) => {
+            if (!response.ok) {
+              console.error("Something went wrong: " + response.statusText);
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((result) => {
+            if (result.results && result.results.length > 0) {
+              setData(result.results[0].question);
+              setAnswer(result.results[0].correct_answer);
+            } else {
+              console.error("No results found");
+            }
+          })
+          .catch((err) => console.error(err));
+      };
+
+      return (
+        <React.Fragment>
+          <h3>Question:</h3>
+          {data ? <div>{data}</div> : <div>No question available</div>}
+          <br></br>
+          {showAnswer && answer ? <div>Answer: {answer}</div> : null}
+          <button onClick={fetchQuestion}>New question</button>
+          <button onClick={() => setShowAnswer(true)}>Show answer</button>
+        </React.Fragment>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<Trivia />);
+  </script>
+</body>
+</html>

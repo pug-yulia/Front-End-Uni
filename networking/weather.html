@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+  <script type="text/babel">
+    function Weather() {
+      const [data, setData] = React.useState({});
+      const [loading, setLoading] = React.useState(true);
+
+      React.useEffect(() => {
+        const apiKey = '9aadb474292fb5d45f7bd3d5ce56a19b';
+        const city = 'Helsinki'; 
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${apiKey}`;
+
+        fetch(apiUrl)
+          .then((response) => {
+            if (!response.ok) {
+              console.error("Something went wrong: " + response.statusText);
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((result) => {
+            setData(result);
+            setLoading(false);
+          })
+          .catch((err) => console.error(err));
+      }, []);
+
+      return (
+        <React.Fragment>
+          {loading ? (
+            <p>Loading weather data...</p>
+          ) : data.main && data.weather && data.weather.length > 0 ? (
+            <div>
+              <div>Temperature: {data.main.temp}°C</div>
+              <div>Weather: {data.weather[0].main}</div>
+              <img
+                src={`https://openweathermap.org/img/w/${data.weather[0].icon}.png`}
+                alt="Weather icon"
+              />
+            </div>
+          ) : (
+            <p>No weather data available</p>
+          )}
+        </React.Fragment>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<Weather />);
+  </script>
+</body>
+</html>
